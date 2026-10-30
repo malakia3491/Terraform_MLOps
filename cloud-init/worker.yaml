@@ -1,0 +1,40 @@
+#cloud-config
+# ВМ worker: ставит Python и запускает бесконечный цикл, имитирующий фоновую работу.
+# Цикл оформлен как systemd-сервис, чтобы переживал перезагрузку ВМ.
+users:
+  - name: ${ssh_user}
+    groups: sudo
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    ssh_authorized_keys:
+      - ${ssh_public_key}
+
+package_update: true
+packages:
+  - python3
+
+write_files:
+  - path: /usr/local/bin/worker-loop.sh
+    permissions: "0755"
+    content: |
+      #!/bin/bash
+      while true; do
+        echo "Task $(date)" >> /var/log/worker.log
+        sleep 60
+      done
+  - path: /etc/systemd/system/worker-loop.service
+    content: |
+      [Unit]
+      Description=Fake background worker
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/local/bin/worker-loop.sh
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - systemctl daemon-reload
+  - systemctl enable --now worker-loop.service

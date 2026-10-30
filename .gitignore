@@ -1,0 +1,15 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl.bak
+terraform.tfstate
+terraform.tfstate.*
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+*.tfvars.json
+*.tfplan
+
+# Секреты
+key.json
+*.pem

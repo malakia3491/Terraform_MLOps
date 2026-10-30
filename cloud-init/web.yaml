@@ -1,0 +1,18 @@
+#cloud-config
+# ВМ web: ставит Docker и запускает nginx, доступный снаружи на порту ${app_port}
+users:
+  - name: ${ssh_user}
+    groups: sudo
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    ssh_authorized_keys:
+      - ${ssh_public_key}
+
+package_update: true
+packages:
+  - docker.io
+
+runcmd:
+  - systemctl enable --now docker
+  - usermod -aG docker ${ssh_user}
+  - docker run -d --name web --restart always -p ${app_port}:80 nginx:latest
