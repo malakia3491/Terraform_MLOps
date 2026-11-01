@@ -21,11 +21,11 @@ output "web_url" {
 output "resource_ids" {
   description = "Идентификаторы созданных ресурсов"
   value = {
-    vpc        = yandex_vpc_network.main.id
-    subnet     = yandex_vpc_subnet.main.id
-    web_sg     = yandex_vpc_security_group.web.id
-    worker_sg  = yandex_vpc_security_group.worker.id
-    web_vm     = yandex_compute_instance.web.id
-    worker_vm  = yandex_compute_instance.worker.id
+    vpc       = yandex_vpc_network.main.id
+    subnet    = yandex_vpc_subnet.main.id
+    web_sg    = yandex_vpc_security_group.web.id
+    worker_sg = yandex_vpc_security_group.worker.id
+    web_vm    = yandex_compute_instance.web.id
+    worker_vm = yandex_compute_instance.worker.id
   }
 }
